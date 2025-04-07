@@ -1,0 +1,160 @@
+<!DOCTYPE html>  
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FootbalStream - Live Football Scores & Stats | FootbalStream – Real-Time Match Updates </title>
+    <meta name="google-site-verification" content="FlcWZVbvNGCBq40KtGjLABVD8ihly9tQgblDOlwB9lw" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Get real-time football scores, in-depth match stats, team lineups, and live updates on FootbalStream. Stay ahead with the latest fixtures, results, and detailed match analysis from top leagues worldwide">
+    <meta name="keywords" content="football live stream, watch football online, live football matches, football streaming, soccer live">
+    <meta name="author" content="FootbalStream">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- Open Graph (OG) Tags for Social Media (includes Facebook, Twitter, etc.) -->
+    <meta property="og:title" content="FootbalStream - Live Football Stream">
+    <meta property="og:description" content="Watch live football streams and get real-time updates on matches and scores.">
+    <meta property="og:image" content="https://footbalstream.com/images/logo.jpeg">
+    <meta property="og:url" content="https://footbalstream.com">
+    <meta property="og:type" content="website">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "https://footbalstream.com",
+      "logo": "https://footbalstream.com/images/logo.jpeg"
+    }
+    </script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MXT6YGV4BT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-MXT6YGV4BT');
+    </script>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3875006854216044"
+     crossorigin="anonymous"></script>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <!-- Manual Refresh Button -->
+    <div class="refresh-button" id="manualRefresh" title="Refresh Data">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+        </svg>
+    </div>
+</head>
+<body>
+   
+    <header>
+        <h1 id="refreshPage">FootbalStream <span id="last-updated" style="font-size: 12px; font-weight: normal;"></span></h1>
+    </header>
+    <div class="border-line"></div>
+    <header>
+        <p>Football Live Scores and Matches</p>
+    </header>
+
+    <!-- Calendar Section -->
+    <div class="calendar-container">
+        <div class="live-box">LIVE</div>
+        <div class="calendar" id="calendar"></div>
+        <input type="date" class="date-input" id="specificDate" />
+    </div>
+
+    <!-- Search Bar Section -->
+    <div class="search-container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search matches..." />
+        </div>
+        <div class="search-tab" id="searchTab">Search</div>
+    </div>
+    
+    <!-- Main Container for Leagues and Matches -->
+    <div class="main-container">
+        <div class="leagues-container">
+            <h3>All Leagues</h3>
+            
+            <div class="league-box" data-id="5">
+                <img src="images/UEFAAA-logo.jpeg" alt="UEFA Nations League Logo" class="league-logo">
+                UEFA Nations League
+            </div>
+            
+            <div class="league-box" data-id="32">
+                <img src="images/worldcuup-logo.jpeg" alt="W/C Qualifier Europe Logo" class="league-logo">
+                W/C Qualifier Europe
+            </div>
+            
+            <div class="league-box" data-id="39">
+                <img src="images/premierr-league-logo.jpeg" alt="Premier League Logo" class="league-logo">
+                Premier League
+            </div>
+            
+            <div class="league-box" data-id="140">
+                <img src="images/laliga-logo.jpeg" alt="La liga logo" class="league-logo">
+                La liga
+            </div>
+
+            <div class="league-box" data-id="61">
+                <img src="images/ligue-1-logo.jpeg" alt="Ligue 1 Logo" class="league-logo">
+                Ligue 1
+            </div>
+
+            <div class="league-box" data-id="78">
+                <img src="images/bundesliga-logo.jpeg" alt="Bundesliga Logo" class="league-logo">
+                Bundesliga
+            </div>
+
+            <div class="league-box" data-id="135">
+                <img src="images/Serie-A-logo.jpeg" alt="Serie A Logo" class="league-logo">
+                Serie A
+            </div>
+
+            <div class="league-box" data-id="2">
+                <img src="images/champions-league.jpeg" alt="Champions League Logo" class="league-logo">
+                Champions League
+            </div>
+
+            <div class="league-box" data-id="3">
+                <img src="images/Europa-league-logo.jpeg" alt="Europa League Logo" class="league-logo">
+                Europa League
+            </div>
+        </div>
+        
+        <div class="match-container" id="matchContainer"></div>
+    </div>
+
+    <footer> 
+        <p class="footer-title">FootbalStream</p>
+        <p class="footer-text">© 2025 FootbalStream, Inc. All rights reserved.</p>
+        <div class="footer-links">
+            <button class="footer-toggle" data-target="about-us">About Us</button>
+            <button class="footer-toggle" data-target="terms">Terms and Conditions</button>
+            <button class="footer-toggle" data-target="privacy-policy">Privacy Policy</button>
+            <button class="footer-toggle" data-target="contact-us">Contact Us</button>
+        </div>
+    </footer>
+
+    <!-- Fullscreen Content Display -->
+    <div id="fullscreen-content" class="fullscreen-content">
+        <div id="content-text"></div>
+        <button class="close-btn" onclick="closeContent()">Close</button>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="assets/scripts/content-data.js"></script>
+    <script src="assets/scripts/app.js"></script>
+</body>
+</html>
+
