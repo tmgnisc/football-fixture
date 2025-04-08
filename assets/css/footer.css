@@ -1,0 +1,38 @@
+footer {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 20px 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    cursor: pointer;
+}
+
+.footer-text {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.footer-links {
+    margin-top: 10px;
+}
+
+.footer-links a {
+    color: red;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 10px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
