@@ -21,1607 +21,377 @@
     <meta property="og:url" content="https://footbalstream.com/matchdetails.html">
     <meta property="og:type" content="article">
 
-<!-- Structured Data for SEO -->
+    <!-- Structured Data for SEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SportsEvent",
       "name": "Live Football Match",
-      "url": "https://footbalstream.com/matchdetails.html",
+      "url": "https://footbalstream.com/matchdetails.html"
     }
     </script>
     
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MXT6YGV4BT"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MXT6YGV4BT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-MXT6YGV4BT');
-</script>
-<!-- Google AdSense -->
+      gtag('config', 'G-MXT6YGV4BT');
+    </script>
+    
+    <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3875006854216044"
      crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: white;
-            background-color: black;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
 
-        header {
-            padding: 10px;
-            width: 100%;
-        }
+    <!-- Chart.js for statistics visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        header h1 {
-            margin: 0;
-            text-align: left;
-            padding-left: 20px;
-            cursor: pointer;
-        }
-
-        .border-line {
-            border-bottom: 3px solid red;
-            width: 100%;
-        }
-
-        #matchTitle { 
-    font-size: 17px;
-    font-weight: bold;
-    display: block;
-    margin-left: 5px; /* Adjust for left alignment */
-    margin-top: -5px;
-    float: left;
-}
-
-
-
-/* Styling for Stream Links (Buttons) */
-.stream-link-button {
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    background-color: #333;
-    color: white;
-    border-radius: 5px;
-    transition: 0.3s;
-    margin: 5px;
-}
-
-.stream-link-button:hover {
-    background-color: #444;
-}
-
-/* Ensure stream buttons are centered */
-#streamLinks {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-/* Centering the iframe properly */
-#matchStreamContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-top: 20px;
-}
-
-/* Ensure iframe is hidden by default and centered */
-#matchStream { 
-    width: 100%; 
-    max-width: 800px; 
-    aspect-ratio: 16 / 9; 
-    border: none;
-    display: none; /* Initially hidden */
-    object-fit: cover; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;  
-}
-
-
-       /* General styling for the match header container */
-.match-header_match-header-container {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #1a1a1a;
-    color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(147, 58, 58, 0.3);
-    margin: 80px auto;
-    width: 80%;
-}
-
-
-
-
-/* Layout of the header section */
-.match-header_match-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Styling for the competition name */
-.match-info_competition-name {
-    font-size: 1.5rem; /* Larger font size for visibility */
-    font-weight: bold; /* Make it bold */
-    color: white; /* A bright color for emphasis (golden yellow) */
-    margin-bottom: 10px; /* Space below the competition name */
-    text-transform: uppercase; /* Capitalize the name */
-    letter-spacing: 2px; /* Slightly spread out the letters for a clean look */
-}
-
-/* Section containing the teams and match details */
-.match-info_section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-/* Container for team logos and names */
-.team_team {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Align logo and name vertically */
-    margin: 0 10px;
-    text-align: center; /* Center the text below the logo */
-}
-
-.team_team-logo {
-    width: 70px; /* Slightly larger for better visibility */
-    height: 70px;
-    margin-bottom: 10px; /* Space between logo and name */
-}
-
-.team_team-name {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: white; /* Ensure the text is visible */
-}
-
-/* Match data styling (date, time, venue) */
-.match-data_match-data {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.match-data_general-info p,
-.match-info_competition-name,
-.match-data_time,
-.match-data_venue {
-    margin: 5px 0;
-}
-
-/* Match day and time */
-.match-data_match-day {
-    font-size: 0.9rem;
-    color: white;
-    font-size: 18px;
-}
-
-.match-data_time {
-    font-size: 18px;
-}
-
-.match-data_venue {
-    font-size: 1rem;
-    color: white;
-    font-size: 18px;
-}
-
-
-/* General styling for the H2H container */
-.h2h-container {
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    padding: 20px;
-    color: white;
-    text-align: center;
-    max-width: 600px;
-    margin-left:200px; /* Use negative margin to move left */
-    margin-top: -30px; /* Keep vertical spacing */
-}
-
-
-/* H2H Header */
-.h2h-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.h2h-title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: white;
-}
-
-/* Team Logos */
-.team-logo {
-    width: 50px;
-    height: 50px;
-}
-.team-name {
-    font-weight: bold;
-    color: white; /* Adjust based on design */
-}
-
-/* Summary stats */
-.h2h-summary {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.summary-box {
-    text-align: center;
-}
-
-.summary-value {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.summary-label {
-    font-size: 1rem;
-    color: white;
-}
-
-/* Matches */
-.h2h-matches {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Individual match */
-.h2h-match {
-    background: #222;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.match-info {
-    font-size: 0.9rem;
-    color: #aaa;
-    margin-bottom: 5px;
-}
-
-.league-name {
-    font-weight: bold;
-    color: white;
-}
-
-/* Match Score Row */
-.match-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 60px;
-    font-size: 1.4rem;
-    font-weight: bold;
-}
-
-.team-logo-small {
-    width: 40px;
-    height: 40px;
-}
-
-
-
-/* General styling for the events container */
-.events-container {
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    padding: 20px;
-    color: white;
-    text-align: center;
-    max-width: 600px;
-    margin: 20px auto;
-    margin-left:200px; /* Use negative margin to move left */
-    margin-top: 30px; /* Keep vertical spacing */
-}
-
-/* Events header */
-.events-header {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 15px;
-}
-
-/* Events list */
-.events-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Individual event */
-.event-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #222;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-/* Event time */
-.event-time {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color:white;
-}
-
-/* Team name and logo */
-.event-team {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.event-team-logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-
-.event-team-name {
-    font-size: 1rem;
-    font-weight: bold;
-}
-
-/* Event type */
-.event-type {
-    font-size: 1rem;
-    color: #ddd;
-}
-
-/* No events message */
-.no-events {
-    text-align: center;
-    font-size: 1.2rem;
-    color: red;
-}
-
-/* General container */
-.statistics-container {
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    padding: 20px;
-    color: white;
-    text-align: center;
-    max-width: 600px;
-    margin: 20px auto;
-    margin-left:200px; /* Use negative margin to move left */
-    margin-top: 30px; /* Keep vertical spacing */
-}
-
-/* Header */
-.statistics-header {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 15px;
-}
-
-/* Ball Possession Indicator */
-.possession-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.possession-label {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: white;
-    width: 20%;
-    text-align: center;
-}
-
-.possession-ball {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.football-icon {
-    width: 70%;
-    height: 70%;
-    border-radius: 50%;
-}
-
-
-/* Team statistics */
-.team-statistics {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 15px;
-}
-
-.team-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.team-logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-
-.team-name {
-    font-size: 1rem;
-    font-weight: bold;
-}
-
-/* Statistic rows */
-.match-statistics {
-    margin-top: 15px;
-    border-top: 2px solid white;
-    padding-top: 10px;
-}
-
-.stat-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px 0;
-}
-
-.team-stat {
-    font-size: 1rem;
-    font-weight: bold;
-    width: 30%;
-    text-align: center;
-}
-
-.stat-category {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: white;
-    width: 40%;
-    text-align: center;
-}
-
-/* No statistics */
-.no-statistics {
-    text-align: center;
-    font-size: 1.2rem;
-    color: white;
-}
-
-
-
-.content {
-            flex: 1; /* Pushes the footer down */
-            padding: 20px;
-            text-align: center;
-        }
-
-        footer {
-            background-color: #222;
-            color: white;
-            text-align: center;
-            padding: 20px 10px;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        .footer-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0;
-            cursor: pointer;
-        }
-        
-        .footer-text {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        
-        .footer-links {
-            margin-top: 10px;
-        }
-        
-        .footer-links button {
-            color: red;
-            background: none;
-            border: none;
-            font-size: 14px;
-            cursor: pointer;
-            margin: 0 10px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-        
-        .footer-links button:hover {
-            text-decoration: underline;
-        }
-        
-        .fullscreen-content {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh; /* Set a maximum height */
-            text-align: center;
-            border-radius: 8px;
-            display: none;
-            z-index: 1000;
-            overflow-y: auto; /* Enables scrolling if content overflows */
-        }
-        
-        
-        .fullscreen-content h2 {
-            margin-top: 0;
-        }
-        
-        .close-btn {
-            margin-top: 15px;
-            color: red;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        @media screen and (max-width: 480px) {
-            html, body {
-               overflow-x: hidden;
-           }
-           header {
-            padding: 5px;
-            width: 100%;
-        }
-       
-        header h1 {
-            margin: 0;
-            text-align: left;
-            padding-left: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        #matchTitle { 
-    font-size: 12px;
-    font-weight: bold;
-    display: block;
-    margin-left: 1px; /* Adjust for left alignment */
-    margin-top: -8px;
-    float: left;
-}
-
-
-
-/* Styling for Stream Links (Buttons) */
-.stream-link-button {
-    padding: 5px 10px;
-    font-size: 12px;
-    cursor: pointer;
-    border: none;
-    background-color: #333;
-    color: white;
-    border-radius: 5px;
-    transition: 0.3s;
-    margin: 5px;
-}
-
-.stream-link-button:hover {
-    background-color: #444;
-}
-
-/* Ensure stream buttons are centered */
-#streamLinks {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-/* Centering the iframe properly */
-#matchStreamContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-top: 20px;
-}
-
-/* Ensure iframe is hidden by default and centered */
-#matchStream { 
-    width: 100%; 
-    max-width: 800px; 
-    aspect-ratio: 16 / 9; 
-    border: none;
-    display: none; /* Initially hidden */
-    object-fit: cover; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;  
-}
-
-
-       /* General styling for the match header container */
-.match-header_match-header-container {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #1a1a1a;
-    color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(147, 58, 58, 0.3);
-    margin: 90px auto;
-    width: 90%;
-}
-
-
-
-
-/* Layout of the header section */
-.match-header_match-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Styling for the competition name */
-.match-info_competition-name {
-    font-size: 12px; 
-    color: white; 
-    margin-bottom: 10px; 
-    align-items: center;
-}
-
-/* Section containing the teams and match details */
-.match-info_section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-
-/* Styling for the competition name */
-.match-info_competition-name {
-    font-size: 12px; 
-    color: white; 
-    margin-bottom: 10px; 
-    align-items: center;
-}
-
-/* Container for team logos and names */
-.team_team {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Align logo and name vertically */
-    margin: 0 10px;
-    text-align: center; /* Center the text below the logo */
-}
-
-.team_team-logo {
-    width: 40px; /* Slightly larger for better visibility */
-    height: 40px;
-    margin-bottom: 10px; /* Space between logo and name */
-}
-
-.team_team-name {
-    font-weight: bold;
-    font-size: 13px;
-    color: white; /* Ensure the text is visible */
-}
-
-/* Match data styling (date, time, venue) */
-.match-data_match-data {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.match-data_general-info p,
-.match-info_competition-name,
-.match-data_time,
-.match-data_venue {
-    margin: 5px 0;
-}
-
-/* Match day and time */
-.match-data_match-day {
-    font-size: 0.9rem;
-    color: white;
-    font-size: 12px;
-}
-
-.match-data_time {
-    font-size: 12px;
-}
-
-.match-data_venue {
-    font-size: 1rem;
-    color: white;
-    font-size: 12px;
-}
-
-/* General styling for the H2H container */
-.h2h-container {
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    padding: 20px;
-    color: white;
-    text-align: center;
-    max-width: 600px;
-    margin-left:10px; /* Use negative margin to move left */
-    margin-top: -30px; /* Keep vertical spacing */
-}
-
-
-/* H2H Header */
-.h2h-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.h2h-title {
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-}
-
-/* Team Logos */
-.team-logo {
-    width: 40px;
-    height: 40px;
-}
-.team-name {
-    font-weight: bold;
-    color: white; /* Adjust based on design */
-    font-size:12px;
-}
-
-/* Summary stats */
-.h2h-summary {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.summary-box {
-    text-align: center;
-}
-
-.summary-value {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.summary-label {
-    font-size: 1rem;
-    color: white;
-}
-
-/* Matches */
-.h2h-matches {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-size:12px;
-}
-
-/* Individual match */
-.h2h-match {
-    background: #222;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    font-size:12px;
-}
-
-.match-info {
-    font-size: 0.9rem;
-    color: #aaa;
-    margin-bottom: 5px;
-    font-size:12px;
-}
-
-.league-name {
-    font-weight: bold;
-    color: white;
-    font-size:12px;
-}
-
-/* Match Score Row */
-.match-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 60px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.team-logo-small {
-    width: 30px;
-    height: 30px;
-}
-
-/* General container */
-.statistics-container {
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    padding: 20px;
-    color: white;
-    text-align: center;
-    max-width: 600px;
-    margin: 20px auto;
-    margin-left:10px; /* Use negative margin to move left */
-    margin-top: 30px; /* Keep vertical spacing */
-}
-
-/* Header */
-.statistics-header {
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 15px;
-}
-
-/* Ball Possession Indicator */
-.possession-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.possession-label {
-    font-size: 14px;
-    font-weight: bold;
-    color: white;
-    width: 20%;
-    text-align: center;
-}
-
-.possession-ball {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size:14px;
-}
-
-.football-icon {
-    width: 70%;
-    height: 70%;
-    border-radius: 50%;
-}
-
-
-/* Team statistics */
-.team-statistics {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 15px;
-}
-
-.team-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size:12px;
-}
-
-.team-logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-
-.team-name {
-    font-size: 12px;
-    font-weight: bold;
-}
-
-/* Statistic rows */
-.match-statistics {
-    margin-top: 15px;
-    border-top: 2px solid white;
-    padding-top: 10px;
-
-}
-
-.stat-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px 0;
-}
-
-.team-stat {
-    font-size: 12px;
-    font-weight: bold;
-    width: 30%;
-    text-align: center;
-}
-
-.stat-category {
-    font-size: 14px;
-    font-weight: bold;
-    color: white;
-    width: 40%;
-    text-align: center;
-}
-
-/* No statistics */
-.no-statistics {
-    text-align: center;
-    font-size: 1.2rem;
-    color: red;
-}
-
-/* General styling for the events container */
-.events-container {
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    padding: 20px;
-    color: white;
-    text-align: center;
-    max-width: 600px;
-    margin: 20px auto;
-    margin-left:10px; /* Use negative margin to move left */
-    margin-top: 30px; /* Keep vertical spacing */
-}
-
-/* Events header */
-.events-header {
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 15px;
-}
-
-/* Events list */
-.events-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Individual event */
-.event-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #222;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-/* Event time */
-.event-time {
-    font-size: 12px;
-    font-weight: bold;
-    color:white;
-}
-
-/* Team name and logo */
-.event-team {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.event-team-logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-
-.event-team-name {
-    font-size: 12px;
-    font-weight: bold;
-}
-
-/* Event type */
-.event-type {
-    font-size: 12px;
-    color: #ddd;
-}
-
-/* No events message */
-.no-events {
-    text-align: center;
-    font-size: 1.2rem;
-    color: red;
-}
-
-
-
-        footer {
-            background-color: #222;
-            color: white;
-            text-align: center;
-            padding: 20px 10px;
-            font-family: 'Poppins', sans-serif;
-         
-        }
-       
-        .footer-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin: 0;
-            cursor: pointer;
-        }
-       
-        .footer-text {
-            margin: 5px 0;
-            font-size: 13px;
-        }
-       
-        .footer-links {
-            margin-top: 10px;
-        }
-       
-        .footer-links button {
-            color: red;
-            background: none;
-            border: none;
-            font-size: 11px;
-            cursor: pointer;
-            margin: 0 10px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-       
-        .footer-links button:hover {
-            text-decoration: underline;
-        }
-       
-        .fullscreen-content {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh; /* Set a maximum height */
-            text-align: center;
-            border-radius: 8px;
-            display: none;
-            z-index: 1000;
-            font-size: 14px;
-            overflow-y: auto; /* Enables scrolling if content overflows */
-        }
-       
-       
-        .fullscreen-content h2 {
-            margin-top: 0;
-        }
-       
-        .close-btn {
-            margin-top: 15px;
-            color: red;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    
-    
-        }       
-        
-    </style>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="assets/css/match-details.css">
 </head>
 <body>
-
- <header>
+    <header>
         <h1 id="refreshPage">FootbalStream</h1>
     </header>
     <div class="border-line"></div>
 
-<div class="content">
-    <h2 id="matchTitle"></h2>
-    
-    <div id="matchStreamContainer">
-        <iframe id="matchStream" allowfullscreen></iframe>
-    </div>
-
-    <div id="streamLinks"></div> <!-- Buttons will appear BELOW the iframe -->
-     <div id="message"></div>  <!-- This must exist for the message to show -->
-
-
-    <div id="matchHeaderContainer"></div>
-    <div id="matchDetails"></div>
-</div>
-
-
-<footer>
-    <p class="footer-title">FootbalStream</p>
-    <p class="footer-text">© 2025 FootbalStream, Inc. All rights reserved.</p>
-    <div class="footer-links">
-        <button class="footer-toggle" data-target="about-us">About Us</button>
-        <button class="footer-toggle" data-target="terms">Terms and Conditions</button>
-        <button class="footer-toggle" data-target="privacy-policy">Privacy Policy</button>
-        <button class="footer-toggle" data-target="contact-us">Contact Us</button>
-    </div>
-</footer>
-
-<!-- Fullscreen Content Display -->
-<div id="fullscreen-content" class="fullscreen-content">
-    <div id="content-text"></div>
-    <button class="close-btn" onclick="closeContent()">Close</button>
-</div>
-
-
-<script>
-
-
-
- 
-  const contentData = {
-        "about-us": `<h2>About Us</h2><p>About Us
-
-Welcome to FootbalStream.com, the ultimate destination for football fans worldwide! We provide real-time updates, live scores, expert analysis, and breaking news—all in one place. Whether you're a passionate supporter, a casual viewer, or a football analyst, we bring you closer to the action like never before.
-Why Choose FootbalStream.com?
-At FootbalStream.com, we are committed to delivering the best football experience with:
-✅ Live Coverage – Follow matches in real time with live scores, and updates from major leagues and tournaments.
-✅ Breaking News – Stay ahead with the latest headlines, transfer rumors, and exclusive reports from the football world.
-✅ Exclusive Features – Access player interviews, team insights, behind-the-scenes content, and more.
-Football is more than just a game—it’s a passion that unites fans across the globe. At FootbalStream.com, we make sure you never miss a moment of the sport you love.
-Join us and experience football like never before! ⚽🔥
-
-Join the FootbalStream Community
-We invite you to join our ever-growing community of football aficionados. Whether you're a die-hard fan, a casual viewer, or a curious newcomer to the world of football, FootbalStream is your football home. Share your thoughts, engage in discussions, and immerse yourself in the beautiful game with us.
-
-Contact Us
-Have questions, suggestions, or feedback? We'd love to hear from you. Feel free to reach out to our dedicated support team through our Contact Us page, and we'll be sure to assist you promptly.
-
-Thank you for choosing FootbalStream as your trusted source for all things football. We look forward to being your companion on this thrilling football journey!
-
-Sincerely,
-The FootbalStream Team</p>`,
-
-        "privacy-policy": `<h2>Privacy Policy</h2><p> 
-Last Updated: [Date]
-
-Welcome to FootballStream ("we," "our," or "us"). Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit www.footbalstream.com ("Website").
-1. Information We Collect
-We may collect the following types of information:
-Personal Information: Name, email address, and other contact details voluntarily provided.
-Non-Personal Information: IP address, browser type, device information, and browsing behavior.
-Cookies & Tracking Technologies: We use cookies, web beacons, and similar tracking technologies to enhance user experience and analyze website traffic.
-2. How We Use Your Information
-We use collected data for the following purposes:
-To operate, maintain, and improve our Website.
-To personalize user experience and deliver relevant content.
-To analyze traffic patterns and user engagement.
-To communicate updates, promotions, and other website-related information.
-To ensure website security and prevent fraud.
-3. Sharing Your Information
-We do not sell, trade, or rent your personal information. However, we may share it with:
-Service Providers: Third-party partners who assist in website operations, analytics, and marketing.
-Legal Authorities: When required by law or in response to legal requests.
-4. Cookies and Third-Party Tracking
-Our Website may use third-party cookies (e.g., Google Analytics, advertising networks) to track user interactions. You can manage cookie preferences in your browser settings.
-5. Data Security
-We implement industry-standard security measures to protect your personal data. However, no method of transmission over the internet is 100% secure.
-6. Third-Party Links
-Our Website may contain links to external sites. We are not responsible for the privacy practices of third-party websites.
-7. Your Rights and Choices
-Opt-Out: You can opt out of marketing communications at any time.
-Access & Update: You can request access to or updates of your personal information.
-Delete Data: You can request the deletion of your personal data, subject to legal requirements.
-8. Changes to This Privacy Policy
-We may update this Privacy Policy periodically. We encourage you to review it regularly.
-9. Contact Us
-If you have any questions or concerns, please contact us at: Email: [footbalstream24@gmail.com]
-Website: www.footbalstream.com</p>`,
-        "terms": `<h2>Terms and Conditions</h2><p>
-
-1. Introduction
-Welcome to FootbalStream ("Website", "we", "our", "us"). By accessing or using our website, you agree to comply with and be bound by these Terms and Conditions. If you do not agree, please refrain from using our services.
-2. Use of the Website
-You must be at least 18 years old or have parental consent to use our website.
-You agree not to use the website for any unlawful activities.
-We reserve the right to suspend or terminate your access if you violate these terms.
-3. Intellectual Property Rights
-All content, logos, graphics, and materials on FootbalStream are the property of the website and its licensors.
-You may not copy, modify, distribute, or reproduce any content without permission.
-4. User-Generated Content
-Users may post comments, reviews, or engage with the website’s interactive features.
-We reserve the right to remove or edit any content that violates our policies.
-5. Disclaimer of Warranties
-The content on FootbalStream is provided "as is" without warranties of any kind.
-We do not guarantee uninterrupted or error-free service.
-We are not responsible for third-party links or content available through the website.
-6. Limitation of Liability
-FootbalStream shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the website.
-You agree to use the website at your own risk.
-7. Privacy Policy
-Your use of the website is also governed by our Privacy Policy, which outlines how we collect, use, and protect your data.
-8. Changes to Terms and Conditions
-We may update these Terms and Conditions at any time. Continued use of the website constitutes acceptance of the revised terms.
-9. Media Disclaimer
-None of the videos is hosted by this site. Streams hosted on external sites like Youtube etc are provided with links here. This site is not responsible for the legality of the content. For legal issues, please contact appropriate media file owners/hosters.
-10. Contact Information
-If you have any questions or concerns regarding these terms, please contact us at [footbalstream24@gmail.com].</p>`,
-        "contact-us": `<h2>Contact Us</h2><p>
-
-Thank you for visiting FootbalStream! We value your feedback, questions, and suggestions. Please feel free to reach out to us using the contact information below, and we'll be happy to assist you.
-
-General Inquiries
-For general inquiries or information about FootbalStream, you can reach us at:
-
-Email: footbalstream24@gmail.com
-
-Advertising and Partnership Opportunities
-If you're interested in advertising on our platform or exploring partnership opportunities with FootballStream, please contact our marketing and business development team at:
-
-Email: footbalstream24@gmail.com
-
-Media and Press Inquiries
-Members of the media and press can contact us for media inquiries, interviews, and press releases at:
-
-Email: footbalstream24@gmail.com
-
-We appreciate your interest in FootbalStream, and we look forward to hearing from you. Your feedback helps us improve and enhance our services to provide you with the best football experience possible.
-
-Thank you for being a part of our football community!
-
-Sincerely,
-The FootbalStream Team
-
-</p>`
-    };
-    
-    document.querySelectorAll(".footer-toggle").forEach(button => {
-        button.addEventListener("click", function () {
-            const target = this.getAttribute("data-target");
-            const contentBox = document.getElementById("fullscreen-content");
-            document.getElementById("content-text").innerHTML = contentData[target];
-            contentBox.style.display = "block";
-        });
-    });
-    
-    function closeContent() {
-        document.getElementById("fullscreen-content").style.display = "none";
-    }
-     
-document.addEventListener("DOMContentLoaded", async function () {
-    // Retrieve fixtureId from sessionStorage
-    const fixtureId = sessionStorage.getItem("fixtureId");
-    
-    if (!fixtureId) {
-        document.getElementById("matchDetails").innerHTML = "<h2>Match not found</h2>";
-        return;
-    }
-
-    const apiKey = "1765f4fdf1376f1afd07d94395f60134";
-
-    async function fetchFixtureDetails(fixtureId) {
-        try {
-            const fixtureRes = await fetch(`https://v3.football.api-sports.io/fixtures?id=${fixtureId}`, {
-                method: "GET",
-                headers: { "x-apisports-key": apiKey }
-            });
-            const fixtureData = await fixtureRes.json();
-            
-            if (!fixtureData.response || fixtureData.response.length === 0) {
-                console.error("No fixture data found");
-                return null;
-            }
-
-            const fixture = fixtureData.response[0];
-            const homeTeam = fixture.teams.home;
-            const awayTeam = fixture.teams.away;
-            const homeTeamId = fixture.teams.home.id;
-            const awayTeamId = fixture.teams.away.id;
-            const matchTime = fixture.fixture.date;
-            const venue = fixture.fixture.venue.name;
-
-
-
-            document.getElementById('matchTitle').textContent = `${homeTeam.name} vs ${awayTeam.name}`;
-
-            const endpoints = {
-                h2h: `https://v3.football.api-sports.io/fixtures/headtohead?h2h=${homeTeamId}-${awayTeamId}`,
-                stats: `https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixtureId}`,
-                events: `https://v3.football.api-sports.io/fixtures/events?fixture=${fixtureId}`,
-                
-            };
-
-            document.getElementById("matchHeaderContainer").innerHTML = `
-                <header class="match-header_match-header-container">
-                    <div class="match-header_match-header">
-                        <span class="match-info_competition-name">${fixture.league.name}</span>
-                        <section class="section-with-dividers match-info_section">
-                            <div class="team_team team_team-a">
-                                <img class="team_team-logo" src="${homeTeam.logo}" alt="${homeTeam.name} logo">
-                                <span class="team_team-name">${homeTeam.name}</span>
-                            </div>
-                            <div class="match-data_match-data">
-                                <div class="match-data_general-info">
-                                    <p class="match-data_match-day">Today</p>
-                                </div>
-                                <time datetime="${matchTime}" class="match-data_time">${new Date(matchTime).toLocaleTimeString()}</time>
-                                <span class="match-data_venue">${venue}</span>
-                            </div>
-                            <div class="team_team team_team-b">
-                                <img class="team_team-logo" src="${awayTeam.logo}" alt="${awayTeam.name} logo">
-                                <span class="team_team-name">${awayTeam.name}</span>
-                            </div>
-                        </section>
-                    </div>
-                </header>
-            `;
-
-            const responses = await Promise.all(
-                Object.entries(endpoints).map(async ([key, url]) => {
-                    const response = await fetch(url, {
-                        method: "GET",
-                        headers: { "x-apisports-key": apiKey }
-                    });
-                    const data = await response.json();
-                    console.log(`API Response for ${key}:`, data);
-                    return response.ok ? { key, data: data.response || [] } : null;
-                })
-            );
-
-            const apiData = responses.reduce((acc, res) => {
-                if (res) acc[res.key] = res.data;
-                return acc;
-            }, {});
-
-            return { fixture, ...apiData };
-        } catch (error) {
-            console.error("Error fetching fixture details:", error);
-            return null;
-        }
-    }
-
-    const fixtureDetails = await fetchFixtureDetails(fixtureId);
-
-    if (!fixtureDetails || !fixtureDetails.fixture) {
-        document.getElementById("matchDetails").innerHTML = "<h2>Failed to load match details</h2>";
-        return;
-    }
-
-    const fixture = fixtureDetails.fixture;
-    document.getElementById('matchTitle').textContent = `${fixture.teams.home.name} vs ${fixture.teams.away.name}`;
-
-    // Define fixtureLinks
-    const fixtureLinks = { 
-            "1212939": [
-             
-                ]
-    };
-
-    // Get stream links based on fixtureId
-    const links = fixtureLinks[fixtureId] || [];
-
-    const matchStream = document.getElementById('matchStream');
-    const linksContainer = document.getElementById('streamLinks');
-    const messageContainer = document.getElementById('message');
-
-    matchStream.style.display = "none"; // Ensure the iframe is hidden initially
-    linksContainer.innerHTML = ''; // Clear any existing content
-
-
-    if (links.length > 0) {
-        if (fixtureId === "910") {
-            messageContainer.textContent = "Watch Live IPL LSG vs MI Here. ";
-        }
-
-      
-        links.forEach((link, index) => {
-            const linkButton = document.createElement('button');
-            linkButton.textContent = `Stream ${index + 1}`;
-            linkButton.classList.add('stream-link-button');
-
-            linkButton.onclick = () => {
-                matchStream.src = link;
-                 matchStream.style.display = "block"; // Show iframe when a stream is selected
-            };
-
-            linksContainer.appendChild(linkButton);
-        });
-    }
-
-
-
-
-    function renderSection(title, content) {
-        return `<h3>${title}</h3>${content || "<p>No data available.</p>"}`;
-    }
-
-    function renderHeadToHead(h2h) {
-    if (!h2h || h2h.length === 0) return "<p>No Head-to-Head data available.</p>";
-
-    // Sort h2h matches by date in descending order
-    h2h.sort((a, b) => new Date(b.fixture.date) - new Date(a.fixture.date));
-
-    // Calculate stats
-    let homeWins = 0, awayWins = 0, draws = 0;
-    h2h.forEach(match => {
-        if (match.score.fulltime.home > match.score.fulltime.away) homeWins++;
-        else if (match.score.fulltime.home < match.score.fulltime.away) awayWins++;
-        else draws++;
-    });
-
-    const homeTeam = h2h[0].teams.home; // Assume first match for home team
-    const awayTeam = h2h[0].teams.away; // Assume first match for away team
-
-    return `
-        <div class="h2h-container">
-            <!-- H2H Header -->
-            <div class="h2h-header">
-                <img src="${homeTeam.logo}" alt="${homeTeam.name}" class="team-logo">
-                <span class="h2h-title">H2H</span>
-                <img src="${awayTeam.logo}" alt="${awayTeam.name}" class="team-logo">
-            </div>
-
-            <!-- Overall H2H Stats -->
-            <div class="h2h-summary">
-                <div class="summary-box">
-                    <span class="summary-value">${homeWins}</span>
-                    <span class="summary-label">Wins</span>
-                </div>
-                <div class="summary-box">
-                    <span class="summary-value">${draws}</span>
-                    <span class="summary-label">Draws</span>
-                </div>
-                <div class="summary-box">
-                    <span class="summary-value">${awayWins}</span>
-                    <span class="summary-label">Wins</span>
-                </div>
-            </div>
-
-            <!-- Last 5 Matches -->
-            <div class="h2h-matches">
-                ${h2h.slice(0, 5).map(match => `
-                    <div class="h2h-match">
-                        <div class="match-info">
-                            <span class="league-name">${match.league.name}</span>
-                            <span class="match-date">${new Date(match.fixture.date).toLocaleDateString()}</span>
-                        </div>
-                        <div class="match-row">
-                            <div class="team-info">
-                                <img src="${match.teams.home.logo}" alt="${match.teams.home.name}" class="team-logo-small">
-                                <span class="team-name">${match.teams.home.name}</span>
-                            </div>
-                            <span class="score">${match.score.fulltime.home} - ${match.score.fulltime.away}</span>
-                            <div class="team-info">
-                                <img src="${match.teams.away.logo}" alt="${match.teams.away.name}" class="team-logo-small">
-                                <span class="team-name">${match.teams.away.name}</span>
-                            </div>
-                        </div>
-                    </div>
-                `).join("")}
-            </div>
-
-           </div>
-    `;
-}
-
-
-function renderStatistics(stats) {
-    if (!stats || stats.length < 2) return `<p class="no-statistics"> Statistics will be available.</p>`;
-
-    const homeTeam = stats[0].team;
-    const awayTeam = stats[1].team;
-
-    // Extract Ball Possession
-    const homePossession = parseInt(stats[0].statistics.find(stat => stat.type === "Ball Possession")?.value.replace('%', '') || 0);
-    const awayPossession = parseInt(stats[1].statistics.find(stat => stat.type === "Ball Possession")?.value.replace('%', '') || 0);
-
-    // Generate the statistics rows
-    const statsHtml = stats[0].statistics.map((s, i) => `
-        <div class="stat-row">
-            <div class="team-stat">${s.value || "N/A"}</div>
-            <div class="stat-category">${s.type}</div>
-            <div class="team-stat">${stats[1].statistics[i].value || "N/A"}</div>
-        </div>
-    `).join("");
-
-    return `
-        <div class="statistics-container">
-            <div class="statistics-header">Statistics</div>
-
-            <!-- Ball Possession Indicator -->
-            <div class="possession-container">
-                <div class="possession-label">${homePossession}%</div>
-                <div class="possession-ball" style="background: linear-gradient(to right, red ${homePossession}%, blue ${awayPossession}%);">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Football_iu_1996.jpg" class="football-icon" alt="Football">
-                </div>
-                <div class="possession-label">${awayPossession}%</div>
-            </div>
-
-            <!-- Team Logos & Stats -->
-            <div class="team-statistics">
-                <div class="team-info">
-                    <img src="${homeTeam.logo}" alt="${homeTeam.name} Logo" class="team-logo">
-                    <span class="team-name">${homeTeam.name}</span>
-                </div>
-                <div class="stat-category">Ball Possession</div>
-                <div class="team-info">
-                    <span class="team-name">${awayTeam.name}</span>
-                    <img src="${awayTeam.logo}" alt="${awayTeam.name} Logo" class="team-logo">
-                </div>
-            </div>
-
-            <!-- Other Statistics -->
-            <div class="match-statistics">
-                ${statsHtml}
-            </div>
-        </div>
-    `;
-}
-
-
-
-
-function renderEvents(events) {
-    if (!events || events.length === 0) {
-        return `<p class="no-events"> Events will be available.</p>`;
-    }
-
-    return `
-        <div class="events-container">
-            <div class="events-header">Events</div>
-            <div class="events-list">
-                ${events.map(event => `
-                    <div class="event-item">
-                        <span class="event-time">${event.time.elapsed}'</span>
-                        <div class="event-team">
-                            <img src="${event.team.logo}" alt="${event.team.name}" class="event-team-logo">
-                            <span class="event-team-name">${event.team.name}</span>
-                        </div>
-                        <span class="event-type">${event.type} (${event.detail})</span>
-                    </div>
-                `).join("")}
-            </div>
-        </div>
-    `;
-}
-
-    document.getElementById("matchDetails").innerHTML = `
-        ${renderSection("", renderHeadToHead(fixtureDetails.h2h))}
-        ${renderSection("", renderStatistics(fixtureDetails.stats))}
-       ${renderSection("", renderEvents(fixtureDetails.events))}
-       
+    <div class="content">
+        <h2 id="matchTitle"></h2>
         
-    `;
-});
+        <!-- Status Message Bar -->
+        <div id="status-message" class="status-info" style="display: none;"></div>
+        
+        <div id="matchStreamContainer">
+            <iframe id="matchStream" allowfullscreen></iframe>
+        </div>
 
-</script>
+        <div id="streamLinks"></div> <!-- Buttons will appear BELOW the iframe -->
+        <div id="message"></div>  <!-- This must exist for the message to show -->
+
+        <div id="matchHeaderContainer"></div>
+        
+        <!-- New Statistics Container -->
+        <div class="match-stats-container">
+            <div class="stats-header">
+                <h3>Match Statistics</h3>
+            </div>
+            
+            <div class="stats-content">
+                <!-- Possession Chart -->
+                <div class="possession-chart-container">
+                    <h4>Ball Possession</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="possessionChart"></canvas>
+                    </div>
+                    <div class="chart-legend" id="possessionLegend"></div>
+                </div>
+                
+                <!-- Top Stats -->
+                <div class="top-stats-container">
+                    <h4>Top Stats</h4>
+                    <div class="stats-grid" id="topStats"></div>
+                </div>
+            </div>
+            
+            <!-- All Stats Button -->
+            <div class="all-stats-toggle">
+                <button id="allStatsBtn">All Stats <span class="toggle-icon">▼</span></button>
+            </div>
+            
+            <!-- All Stats Container (Hidden by default) -->
+            <div class="all-stats-container" id="allStatsContainer">
+                <div class="stats-grid" id="allStats"></div>
+            </div>
+        </div>
+        
+        <!-- New Lineups Container -->
+        <div class="lineups-container">
+            <div class="lineups-header">
+                <h3>Lineups</h3>
+            </div>
+            
+            <div class="teams-formation">
+                <div class="team-formation home-team">
+                    <div class="team-info">
+                        <img src="/placeholder.svg" alt="Home Team" class="team-logo" id="homeTeamLogo">
+                        <span class="team-abbr" id="homeTeamAbbr"></span>
+                        <span class="team-formation-text" id="homeTeamFormation">4-4-2</span>
+                    </div>
+                </div>
+                <div class="team-formation away-team">
+                    <div class="team-info">
+                        <span class="team-formation-text" id="awayTeamFormation">4-2-3-1</span>
+                        <span class="team-abbr" id="awayTeamAbbr"></span>
+                        <img src="/placeholder.svg" alt="Away Team" class="team-logo" id="awayTeamLogo">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pitch-container">
+                <div class="pitch">
+                    <!-- Home Team Players (Left Side) -->
+                    <div class="team-players home-players">
+                        <!-- GK -->
+                        <div class="player-position gk">
+                            <div class="player">
+                                <div class="player-number">1</div>
+                                <div class="player-name">Junior</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Defenders -->
+                        <div class="player-position def">
+                            <div class="player">
+                                <div class="player-number">17</div>
+                                <div class="player-name">Femenía</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">9</div>
+                                <div class="player-name">Buchanan</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">22</div>
+                                <div class="player-name">Pérez</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">14</div>
+                                <div class="player-name">Comesaña</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Midfielders -->
+                        <div class="player-position mid">
+                            <div class="player">
+                                <div class="player-number">3</div>
+                                <div class="player-name">Foyth</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">2</div>
+                                <div class="player-name">Costa</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">10</div>
+                                <div class="player-name">Parejo</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">15</div>
+                                <div class="player-name">Barry</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Forwards -->
+                        <div class="player-position fwd">
+                            <div class="player">
+                                <div class="player-number">23</div>
+                                <div class="player-name">Cardona</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">16</div>
+                                <div class="player-name">Baena</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Away Team Players (Right Side) -->
+                    <div class="team-players away-players">
+                        <!-- GK -->
+                        <div class="player-position gk">
+                            <div class="player">
+                                <div class="player-number">1</div>
+                                <div class="player-name">Simón</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Defenders -->
+                        <div class="player-position def">
+                            <div class="player">
+                                <div class="player-number">2</div>
+                                <div class="player-name">Gorosabel</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">23</div>
+                                <div class="player-name">Jauregizar</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">9</div>
+                                <div class="player-name">Williams</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">3</div>
+                                <div class="player-name">Vivian</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Defensive Midfielders -->
+                        <div class="player-position dmid">
+                            <div class="player">
+                                <div class="player-number">12</div>
+                                <div class="player-name">Guruzeta</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">20</div>
+                                <div class="player-name">Gómez</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Attacking Midfielders -->
+                        <div class="player-position amid">
+                            <div class="player">
+                                <div class="player-number">10</div>
+                                <div class="player-name">Williams</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">24</div>
+                                <div class="player-name">Prados</div>
+                            </div>
+                            <div class="player">
+                                <div class="player-number">4</div>
+                                <div class="player-name">Paredes</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Forward -->
+                        <div class="player-position fwd">
+                            <div class="player">
+                                <div class="player-number">17</div>
+                                <div class="player-name">Berchiche</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coaches Section -->
+            <div class="coaches-section">
+                <div class="coach home-coach">
+                    <img src="/placeholder.svg" alt="Home Coach" class="coach-img" id="homeCoachImg">
+                    <span class="coach-name" id="homeCoachName">Marcelino García Toral</span>
+                </div>
+                <div class="coaches-title">Coaches</div>
+                <div class="coach away-coach">
+                    <span class="coach-name" id="awayCoachName">Ernesto Valverde Tejedor</span>
+                    <img src="/placeholder.svg" alt="Away Coach" class="coach-img" id="awayCoachImg">
+                </div>
+            </div>
+            
+            <!-- Substitutions Section -->
+            <div class="substitutions-section">
+                <div class="substitutions-header">Substitutions</div>
+                <div class="substitutions-content">
+                    <div class="team-subs home-subs">
+                        <div class="sub-player">
+                            <span class="sub-number">4</span>
+                            <span class="sub-name">Eric Bailly</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-number">5</span>
+                            <span class="sub-name">Willy Kambwala</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-number">6</span>
+                            <span class="sub-name">Denis Suárez</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-number">7</span>
+                            <span class="sub-name">Gerard Moreno</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-number">13</span>
+                            <span class="sub-name">Diego Conde</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-number">18</span>
+                            <span class="sub-name">Pape Gueye</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-number">21</span>
+                            <span class="sub-name">Yéremy Pino</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-number">24</span>
+                            <span class="sub-name">Alfonso Pedraza</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-number">26</span>
+                            <span class="sub-name">Pau Navarro</span>
+                        </div>
+                    </div>
+                    <div class="team-subs away-subs">
+                        <div class="sub-player">
+                            <span class="sub-name">Mikel Vesga</span>
+                            <span class="sub-number">6</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Álex Berenguer</span>
+                            <span class="sub-number">7</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Oihan Sancet</span>
+                            <span class="sub-number">8</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Álvaro Djaló</span>
+                            <span class="sub-number">11</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Julen Agirrezabala</span>
+                            <span class="sub-number">13</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Unai Núñez</span>
+                            <span class="sub-number">14</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Iñigo Lekue</span>
+                            <span class="sub-number">15</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Óscar de Marcos</span>
+                            <span class="sub-number">18</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Maroan Sannadi</span>
+                            <span class="sub-number">21</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Peio Canales</span>
+                            <span class="sub-number">28</span>
+                        </div>
+                        <div class="sub-player">
+                            <span class="sub-name">Adama Boiro</span>
+                            <span class="sub-number">32</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="matchDetails"></div>
+    </div>
+
+    <footer>
+        <p class="footer-title">FootbalStream</p>
+        <p class="footer-text">© 2025 FootbalStream, Inc. All rights reserved.</p>
+        <div class="footer-links">
+            <button class="footer-toggle" data-target="about-us">About Us</button>
+            <button class="footer-toggle" data-target="terms">Terms and Conditions</button>
+            <button class="footer-toggle" data-target="privacy-policy">Privacy Policy</button>
+            <button class="footer-toggle" data-target="contact-us">Contact Us</button>
+        </div>
+    </footer>
+
+    <!-- Fullscreen Content Display -->
+    <div id="fullscreen-content" class="fullscreen-content">
+        <div id="content-text"></div>
+        <button class="close-btn" onclick="closeContent()">Close</button>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="assets/scripts/content-data.js"></script>
+    <script src="assets/scripts/matchdetails.js"></script>
+
 
 
 </body>

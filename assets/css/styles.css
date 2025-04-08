@@ -34,6 +34,26 @@ header p {
   width: 100%;
 }
 
+/* Status Message Styles */
+#status-message {
+  padding: 10px;
+  text-align: center;
+  margin: 5px auto;
+  width: 90%;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.status-info {
+  background-color: rgba(0, 0, 255, 0.2);
+  color: #aaddff;
+}
+
+.status-error {
+  background-color: rgba(255, 0, 0, 0.2);
+  color: #ffaaaa;
+}
+
 /* Calendar Styles */
 .calendar-container {
   padding: 20px 10px;
@@ -393,6 +413,11 @@ footer {
   .border-line {
     border-bottom: 1px solid red;
     width: 100%;
+  }
+
+  #status-message {
+    font-size: 12px;
+    padding: 5px;
   }
 
   .calendar-container {

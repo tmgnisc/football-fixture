@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput")
   const searchTab = document.getElementById("searchTab")
   const resultsContainer = document.getElementById("results")
+  const statusElement = document.getElementById("status-message")
 
   // Dummy data for footer content
   const contentData = {
@@ -45,8 +46,95 @@ document.addEventListener("DOMContentLoaded", () => {
   // Make the close button work
   document.querySelector(".close-btn").addEventListener("click", closeContent)
 
-  // Hardcoded fixtures
+  // Hardcoded fixtures - EXPANDED with more matches as fallback data
   const hardcodedFixtures = [
+    // Premier League
+    {
+      league: "Premier League",
+      teams: "Manchester United vs Liverpool",
+      date: getUserLocalDate(), // Today's date
+      time: "15:00",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1001",
+    },
+    {
+      league: "Premier League",
+      teams: "Arsenal vs Chelsea",
+      date: getUserLocalDate(), // Today's date
+      time: "17:30",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1002",
+    },
+    // La Liga
+    {
+      league: "La Liga",
+      teams: "Barcelona vs Real Madrid",
+      date: getUserLocalDate(), // Today's date
+      time: "20:00",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1003",
+    },
+    {
+      league: "La Liga",
+      teams: "Atletico Madrid vs Sevilla",
+      date: getUserLocalDate(), // Today's date
+      time: "18:15",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1004",
+    },
+    // Champions League
+    {
+      league: "Champions League",
+      teams: "Bayern Munich vs PSG",
+      date: getUserLocalDate(), // Today's date
+      time: "20:00",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1005",
+    },
+    // Add more fixtures for other leagues
+    {
+      league: "Serie A",
+      teams: "Juventus vs Inter Milan",
+      date: getUserLocalDate(), // Today's date
+      time: "19:45",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1006",
+    },
+    {
+      league: "Bundesliga",
+      teams: "Borussia Dortmund vs Bayern Munich",
+      date: getUserLocalDate(), // Today's date
+      time: "17:30",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1007",
+    },
+    // Add some fixtures for tomorrow
+    {
+      league: "Premier League",
+      teams: "Manchester City vs Tottenham",
+      date: getTomorrowDate(), // Tomorrow's date
+      time: "15:00",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1008",
+    },
+    {
+      league: "La Liga",
+      teams: "Valencia vs Villarreal",
+      date: getTomorrowDate(), // Tomorrow's date
+      time: "18:30",
+      status: "Scheduled",
+      score: "",
+      fixtureId: "1009",
+    },
+    // Original fixtures
     {
       league: "Saudi Pro League",
       teams: "Al Hilal vs Al Nassr",
@@ -70,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let matchData = {}
   const fixtureIds = [] // Store fixture IDs for later use
   let apiFailureCount = 0
+  let isOfflineMode = false
 
   // Get user local time zone
   function getUserTimeZone() {
@@ -79,6 +168,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Get today's date in user's local timezone
   function getUserLocalDate() {
     return new Date().toLocaleDateString("en-CA", { timeZone: getUserTimeZone() })
+  }
+
+  // Get tomorrow's date
+  function getTomorrowDate() {
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    return tomorrow.toLocaleDateString("en-CA", { timeZone: getUserTimeZone() })
   }
 
   const today = getUserLocalDate() // Updated to user's local date
@@ -98,8 +194,57 @@ document.addEventListener("DOMContentLoaded", () => {
     return new Date(dateTime).toLocaleDateString("en-CA", { timeZone: getUserTimeZone() })
   }
 
+  // Function to update status message
+  function updateStatus(message, isError = false) {
+    if (statusElement) {
+      statusElement.textContent = message
+      statusElement.className = isError ? "status-error" : "status-info"
+      statusElement.style.display = "block"
+
+      // Hide after 5 seconds unless it's an error
+      if (!isError) {
+        setTimeout(() => {
+          statusElement.style.display = "none"
+        }, 5000)
+      }
+    }
+  }
+
+  // Function to load fallback data
+  function loadFallbackData() {
+    console.log("Loading fallback data...")
+    isOfflineMode = true
+
+    // Create structured data from hardcoded fixtures
+    const fallbackData = {}
+
+    hardcodedFixtures.forEach((match) => {
+      if (!fallbackData[match.date]) fallbackData[match.date] = {}
+      if (!fallbackData[match.date][match.league]) fallbackData[match.date][match.league] = []
+      fallbackData[match.date][match.league].push(match)
+    })
+
+    matchData = fallbackData
+    localStorage.setItem("cachedMatches", JSON.stringify(matchData))
+    displayMatches(today)
+
+    updateStatus("⚠️ Using offline data. Some matches may not be current.", true)
+  }
+
+  // Check network status
+  function checkNetworkStatus() {
+    return navigator.onLine
+  }
+
   // Fetch fixtures from API
   async function fetchFixtures() {
+    // Check if we're online
+    if (!checkNetworkStatus()) {
+      console.log("Device is offline")
+      loadFallbackData()
+      return
+    }
+
     // Load cached matches first (instant display)
     const cachedMatches = localStorage.getItem("cachedMatches")
     if (cachedMatches) {
@@ -113,11 +258,35 @@ document.addEventListener("DOMContentLoaded", () => {
         showRefreshIndicator()
       }
 
+      updateStatus("Fetching latest match data...")
+
+      // Get today's date and format it as YYYY-MM-DD
+      const today = new Date().toISOString().split("T")[0]
+      // Get date 30 days in the future
+      const futureDate = new Date()
+      futureDate.setDate(futureDate.getDate() + 30)
+      const futureDateStr = futureDate.toISOString().split("T")[0]
+
       const fetchPromises = leagues.map((league) => {
-        return fetch(`https://v3.football.api-sports.io/fixtures?league=${league.id}&season=${season}`, {
-          method: "GET",
-          headers: { "x-apisports-key": apiKey },
-        }).then((response) => (response.ok ? response.json() : null))
+        return fetch(
+          `https://v3.football.api-sports.io/fixtures?league=${league.id}&season=${season}&from=${today}&to=${futureDateStr}`,
+          {
+            method: "GET",
+            headers: { "x-apisports-key": apiKey },
+            // Add timeout to prevent hanging requests
+            signal: AbortSignal.timeout(10000), // 10 second timeout
+          },
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`API request failed with status ${response.status}`)
+            }
+            return response.json()
+          })
+          .catch((error) => {
+            console.error(`Error fetching league ${league.id}:`, error)
+            return null
+          })
       })
 
       // Fetch all data in parallel
@@ -130,11 +299,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const newMatchData = {}
+      let matchCount = 0
+
       responses.forEach((data, index) => {
         if (!data || !data.response) return
         const league = leagues[index]
 
         data.response.forEach((match) => {
+          matchCount++
           const matchDate = formatMatchDate(match.fixture.date) // Ensure local date
           const matchStatus = match.fixture.status.long
           const fixtureId = match.fixture.id // Get fixture ID
@@ -142,19 +314,28 @@ document.addEventListener("DOMContentLoaded", () => {
           // Store fixtureId for later use
           fixtureIds.push(fixtureId)
 
+          // Determine status display text
+          let statusDisplay = matchStatus
+          if (["First Half", "Second Half", "Halftime", "Extra time", "LIVE"].includes(matchStatus)) {
+            statusDisplay = `<span style="color: red;">LIVE</span>`
+          } else if (matchStatus === "Match Finished" || matchStatus === "FINISHED") {
+            statusDisplay = "F/T"
+          } else if (["POSTPONED", "CANCELED", "SUSPENDED"].includes(matchStatus)) {
+            statusDisplay = "N/S"
+          } else if (matchStatus === "Not Started" || matchStatus === "Time to be defined") {
+            // Format the match time for future matches
+            const matchDateTime = new Date(match.fixture.date)
+            const timeStr = matchDateTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+            statusDisplay = `${timeStr}`
+          }
+
           const formattedMatch = {
             teams: `<span class="home-team">${match.teams.home.name} <img src="${match.teams.home.logo}" alt="${match.teams.home.name} logo" class="team-logo home-logo"></span> 
                       vs 
                       <span class="away-team"><img src="${match.teams.away.logo}" alt="${match.teams.away.name} logo" class="team-logo away-logo"> ${match.teams.away.name}</span>`,
             date: matchDate,
             time: formatMatchTime(match.fixture.date),
-            status: ["First Half", "Second Half", "Halftime", "Extra time", "LIVE"].includes(matchStatus)
-              ? `<span style="color: red;">LIVE</span>`
-              : matchStatus === "FINISHED"
-                ? "F/T"
-                : ["POSTPONED", "CANCELED"].includes(matchStatus)
-                  ? "N/S"
-                  : matchStatus,
+            status: statusDisplay,
             score: match.goals.home !== null ? `${match.goals.home} - ${match.goals.away}` : "",
             fixtureId: fixtureId,
           }
@@ -165,12 +346,19 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       })
 
-      // Add hardcoded fixtures
-      hardcodedFixtures.forEach((match) => {
-        if (!newMatchData[match.date]) newMatchData[match.date] = {}
-        if (!newMatchData[match.date][match.league]) newMatchData[match.date][match.league] = []
-        newMatchData[match.date][match.league].push(match)
-      })
+      // If we got no matches at all, throw an error
+      if (matchCount === 0) {
+        throw new Error("No matches returned from API")
+      }
+
+      // Add hardcoded fixtures only if we're in offline mode or for testing
+      if (isOfflineMode) {
+        hardcodedFixtures.forEach((match) => {
+          if (!newMatchData[match.date]) newMatchData[match.date] = {}
+          if (!newMatchData[match.date][match.league]) newMatchData[match.date][match.league] = []
+          newMatchData[match.date][match.league].push(match)
+        })
+      }
 
       // Compare old and new data to prevent duplicate matches
       if (JSON.stringify(newMatchData) !== JSON.stringify(matchData)) {
@@ -184,24 +372,37 @@ document.addEventListener("DOMContentLoaded", () => {
           const now = new Date()
           lastUpdatedElement.textContent = `(Updated: ${now.toLocaleTimeString()})`
         }
+
+        updateStatus(`✅ Data updated successfully (${matchCount} matches)`)
+      } else {
+        updateStatus("No new match data available")
       }
 
       // Reset the API failure counter on successful fetch
       apiFailureCount = 0
+      isOfflineMode = false
     } catch (error) {
       console.error("Error fetching fixtures:", error)
 
       // Increment API failure counter
       apiFailureCount++
 
-      // If we've had multiple consecutive failures, show error and schedule page reload
+      // If we've had multiple consecutive failures
       if (apiFailureCount >= 3) {
-        matchContainer.innerHTML = "<p>Error loading data. Page will refresh automatically in 10 seconds...</p>"
+        updateStatus("⚠️ Unable to connect to the server. Using offline data.", true)
+        loadFallbackData()
+
+        // Try again in 2 minutes
         setTimeout(() => {
-          window.location.reload()
-        }, 10000)
+          fetchFixtures()
+        }, 120000) // 2 minutes
       } else {
-        matchContainer.innerHTML = "<p>Error loading data. Trying again soon...</p>"
+        updateStatus(`⚠️ Error loading data. Retry attempt ${apiFailureCount}/3...`, true)
+
+        // Try again in 30 seconds
+        setTimeout(() => {
+          fetchFixtures()
+        }, 30000) // 30 seconds
       }
     }
   }
@@ -248,7 +449,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function displayMatches(date) {
     matchContainer.innerHTML = "" // Clear previous matches
 
-    if (!matchData[date]) {
+    if (!matchData[date] || Object.keys(matchData[date]).length === 0) {
       matchContainer.innerHTML = `<p>No matches for ${date}.</p>`
       return
     }
@@ -389,31 +590,48 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchFixtures()
   })
 
+  // Listen for online/offline events
+  window.addEventListener("online", () => {
+    console.log("Device is now online")
+    updateStatus("🌐 Connection restored. Fetching latest data...")
+    fetchFixtures()
+  })
+
+  window.addEventListener("offline", () => {
+    console.log("Device is now offline")
+    updateStatus("📵 You are offline. Using cached data.", true)
+    isOfflineMode = true
+  })
+
   // Initialize and fetch data
   fetchFixtures()
   addCalendarDates()
 
-  // Modify the auto-refresh interval to include a full page reload occasionally
-  // Set up automatic data refresh (every 60 seconds)
-  const REFRESH_INTERVAL = 60000 // 60 seconds in milliseconds
-  const PAGE_RELOAD_INTERVAL = 3600000 // 1 hour in milliseconds (adjust as needed)
-  let lastPageReloadTime = Date.now()
+  // Set up automatic data refresh with exponential backoff
+  let refreshInterval = 60000 // Start with 60 seconds
+  const MAX_REFRESH_INTERVAL = 300000 // Max 5 minutes
 
-  setInterval(() => {
-    console.log("Auto-refreshing match data...")
-
-    // Check if we should do a full page reload
-    const currentTime = Date.now()
-    if (currentTime - lastPageReloadTime >= PAGE_RELOAD_INTERVAL) {
-      console.log("Performing full page reload...")
-      window.location.reload()
-      lastPageReloadTime = currentTime
-      return
+  function scheduleNextRefresh() {
+    // If we're having API issues, increase the interval (exponential backoff)
+    if (apiFailureCount > 0) {
+      refreshInterval = Math.min(refreshInterval * 1.5, MAX_REFRESH_INTERVAL)
+    } else {
+      // Reset to normal interval when things are working
+      refreshInterval = 60000
     }
 
-    // Otherwise just refresh the data
-    fetchFixtures()
-  }, REFRESH_INTERVAL)
+    console.log(`Scheduling next refresh in ${refreshInterval / 1000} seconds`)
+
+    setTimeout(() => {
+      console.log("Auto-refreshing match data...")
+      fetchFixtures().then(() => {
+        scheduleNextRefresh()
+      })
+    }, refreshInterval)
+  }
+
+  // Start the refresh cycle
+  scheduleNextRefresh()
 
   // Add a visual indicator for when data refreshes
   function showRefreshIndicator() {
@@ -434,4 +652,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000)
   }
 })
-
