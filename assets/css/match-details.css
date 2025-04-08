@@ -1034,13 +1034,28 @@ header h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.match-info {
+.h2h-match .match-info {
   font-size: 0.9rem;
   color: #aaa;
   margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
+  /* Change from display: flex and justify-content: space-between */
+  /* to a centered text alignment */
+  display: block;
+  text-align: center;
+  padding: 0 5px;
+}
+
+/* Add specific styling for the league name and match date */
+.h2h-match .league-name,
+.h2h-match .match-date {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+/* Make the league name more prominent */
+.h2h-match .league-name {
+  font-weight: bold;
+  color: #ffeb3b;
 }
 
 .league-name {
@@ -1077,6 +1092,52 @@ header h1 {
   border-radius: 5px;
   min-width: 80px;
   text-align: center;
+}
+
+/* Add these styles for the Show All/Show Less buttons */
+.show-all-matches,
+.show-less-matches {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.show-all-btn,
+.show-less-btn {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.show-all-btn:hover,
+.show-less-btn:hover {
+  background-color: #444;
+  transform: translateY(-2px);
+}
+
+.show-less-btn {
+  background-color: #555;
+}
+
+/* Add a transition for smoother appearance of new matches */
+.h2h-match {
+  transition: opacity 0.3s, transform 0.3s;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* General styling for the events container */

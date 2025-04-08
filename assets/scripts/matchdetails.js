@@ -375,6 +375,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Handle stream links
     setupStreamLinks(fixtureId)
+
+    setupH2HExpandButton()
   }
 
   // Render match header with score
@@ -786,6 +788,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Sort players into position groups
     lineup.startXI.forEach((player) => {
+      // Fix: Check if player.player exists and has a pos property
+      if (!player.player) {
+        console.error("Invalid player data:", player)
+        return
+      }
+
       const pos = player.player.pos || "M" // Default to midfielder if position is unknown
       if (positions[pos]) {
         positions[pos].push(player)
@@ -814,7 +822,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       positions["D"].forEach((player) => {
         const playerDiv = createPlayerElement(player)
-        defSection.appendChild(defSection)
+        // Fix: Append to defSection, not to itself
+        defSection.appendChild(playerDiv)
       })
 
       container.appendChild(defSection)
@@ -877,6 +886,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Create a player element
   function createPlayerElement(player) {
+    // Fix: Check if player.player exists
+    if (!player.player) {
+      console.error("Invalid player data:", player)
+      return document.createElement("div") // Return empty div to avoid errors
+    }
+
     const playerDiv = document.createElement("div")
     playerDiv.className = "player"
 
@@ -906,6 +921,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Add each substitute
     substitutes.forEach((sub) => {
+      // Fix: Check if sub.player exists
+      if (!sub.player) {
+        console.error("Invalid substitute data:", sub)
+        return
+      }
+
       const subDiv = document.createElement("div")
       subDiv.className = "sub-player"
 
@@ -1143,70 +1164,138 @@ document.addEventListener("DOMContentLoaded", async () => {
     const homeTeam = h2h[0].teams.home // Assume first match for home team
     const awayTeam = h2h[0].teams.away // Assume first match for away team
 
+    // Store all matches in a data attribute for later use
+    const allMatchesData = JSON.stringify(h2h)
+
+    // Initially show only 5 matches
+    const initialMatches = h2h.slice(0, 5)
+    const hasMoreMatches = h2h.length > 5
+
     return `
-        <div class="h2h-container">
-            <!-- H2H Header -->
-            <div class="h2h-header">
-                <img src="${homeTeam.logo}" alt="${homeTeam.name}" class="team-logo">
-                <span class="h2h-title">Head to Head</span>
-                <img src="${awayTeam.logo}" alt="${awayTeam.name}" class="team-logo">
+    <div class="h2h-container" data-all-matches='${allMatchesData}'>
+        <!-- H2H Header -->
+        <div class="h2h-header">
+            <img src="${homeTeam.logo}" alt="${homeTeam.name}" class="team-logo">
+            <span class="h2h-title">Head to Head</span>
+            <img src="${awayTeam.logo}" alt="${awayTeam.name}" class="team-logo">
+        </div>
+
+        <!-- Overall H2H Stats -->
+        <div class="h2h-summary">
+            <div class="summary-box">
+                <span class="summary-value">${homeWins}</span>
+                <span class="summary-label">Wins</span>
             </div>
-
-            <!-- Overall H2H Stats -->
-            <div class="h2h-summary">
-                <div class="summary-box">
-                    <span class="summary-value">${homeWins}</span>
-                    <span class="summary-label">Wins</span>
-                </div>
-                <div class="summary-box">
-                    <span class="summary-value">${draws}</span>
-                    <span class="summary-label">Draws</span>
-                </div>
-                <div class="summary-box">
-                    <span class="summary-value">${awayWins}</span>
-                    <span class="summary-label">Wins</span>
-                </div>
+            <div class="summary-box">
+                <span class="summary-value">${draws}</span>
+                <span class="summary-label">Draws</span>
             </div>
-
-            <!-- Last 5 Matches -->
-            <div class="h2h-matches">
-                ${h2h
-                  .slice(0, 5)
-                  .map((match) => {
-                    // Format the score properly - show 0-0 for future matches instead of null-null
-                    let score = "0-0" // Default for future matches
-                    if (match.score.fulltime.home !== null && match.score.fulltime.away !== null) {
-                      score = `${match.score.fulltime.home} - ${match.score.fulltime.away}`
-                    }
-
-                    return `
-                      <div class="h2h-match">
-                          <div class="match-info">
-                              <span class="league-name">${match.league.name}</span>
-                              <span class="match-date">${new Date(match.fixture.date).toLocaleDateString()}</span>
-                          </div>
-                          <div class="match-row">
-                              <div class="team-info">
-                                  <img src="${match.teams.home.logo}" alt="${match.teams.home.name}" class="team-logo-small">
-                                  <span class="team-name" title="${match.teams.home.name}">${match.teams.home.name}</span>
-                              </div>
-                              <span class="score">${score}</span>
-                              <div class="team-info">
-                                  <img src="${match.teams.away.logo}" alt="${match.teams.away.name}" class="team-logo-small">
-                                  <span class="team-name" title="${match.teams.away.name}">${match.teams.away.name}</span>
-                              </div>
-                          </div>
-                      </div>
-                  `
-                  })
-                  .join("")}
+            <div class="summary-box">
+                <span class="summary-value">${awayWins}</span>
+                <span class="summary-label">Wins</span>
             </div>
         </div>
+
+        <!-- Matches -->
+        <div class="h2h-matches" id="h2hMatchesList">
+            ${renderMatchItems(initialMatches)}
+        </div>
+        
+        ${
+          hasMoreMatches
+            ? `
+        <div class="show-all-matches">
+            <button id="showAllH2HMatches" class="show-all-btn">Show All Matches</button>
+        </div>
+        `
+            : ""
+        }
+    </div>
+  `
+  }
+
+  // Add this new helper function to render match items
+  function renderMatchItems(matches) {
+    return matches
+      .map((match) => {
+        // Format the score properly - show 0-0 for future matches instead of null-null
+        let score = "0-0" // Default for future matches
+        if (match.score.fulltime.home !== null && match.score.fulltime.away !== null) {
+          score = `${match.score.fulltime.home} - ${match.score.fulltime.away}`
+        }
+
+        return `
+      <div class="h2h-match">
+          <div class="match-info">
+              <span class="league-name">${match.league.name}</span>
+              <span class="match-date">${new Date(match.fixture.date).toLocaleDateString()}</span>
+          </div>
+          <div class="match-row">
+              <div class="team-info">
+                  <img src="${match.teams.home.logo}" alt="${match.teams.home.name}" class="team-logo-small">
+                  <span class="team-name" title="${match.teams.home.name}">${match.teams.home.name}</span>
+              </div>
+              <span class="score">${score}</span>
+              <div class="team-info">
+                  <img src="${match.teams.away.logo}" alt="${match.teams.away.name}" class="team-logo-small">
+                  <span class="team-name" title="${match.teams.away.name}">${match.teams.away.name}</span>
+              </div>
+          </div>
+      </div>
     `
+      })
+      .join("")
+  }
+
+  // Add this new function to handle showing all matches
+  function setupH2HExpandButton() {
+    const showAllBtn = document.getElementById("showAllH2HMatches")
+    if (showAllBtn) {
+      showAllBtn.addEventListener("click", function () {
+        const h2hContainer = document.querySelector(".h2h-container")
+        const matchesList = document.getElementById("h2hMatchesList")
+
+        if (h2hContainer && matchesList) {
+          try {
+            // Get all matches data from the data attribute
+            const allMatches = JSON.parse(h2hContainer.dataset.allMatches || "[]")
+
+            // Render all matches
+            matchesList.innerHTML = renderMatchItems(allMatches)
+
+            // Hide the button after showing all matches
+            this.parentElement.style.display = "none"
+
+            // Add a "Show Less" button if needed
+            const showLessBtn = document.createElement("div")
+            showLessBtn.className = "show-less-matches"
+            showLessBtn.innerHTML = `<button class="show-less-btn">Show Less</button>`
+            h2hContainer.appendChild(showLessBtn)
+
+            // Add event listener to "Show Less" button
+            showLessBtn.querySelector(".show-less-btn").addEventListener("click", function () {
+              // Render only 5 matches again
+              matchesList.innerHTML = renderMatchItems(allMatches.slice(0, 5))
+
+              // Show the "Show All" button again
+              showAllBtn.parentElement.style.display = "block"
+
+              // Remove the "Show Less" button
+              this.parentElement.remove()
+            })
+          } catch (error) {
+            console.error("Error showing all matches:", error)
+          }
+        }
+      })
+    }
   }
 
   // Render events section
   function renderEvents(events) {
+    // Fix: Add better logging for events data
+    console.log("Events data:", events)
+
     if (!events || events.length === 0) {
       return `
       <div class="events-container">
@@ -1230,6 +1319,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <span class="event-team-name">${event.team.name}</span>
                     </div>
                     <span class="event-type">${event.type} ${event.detail ? `(${event.detail})` : ""}</span>
+                    ${event.player && event.player.name ? `<span class="event-player">${event.player.name}</span>` : ""}
                 </div>
             `,
               )

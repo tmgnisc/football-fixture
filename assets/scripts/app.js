@@ -260,23 +260,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       updateStatus("Fetching latest match data...")
 
-      // Get today's date and format it as YYYY-MM-DD
-      const today = new Date().toISOString().split("T")[0]
-      // Get date 30 days in the future
-      const futureDate = new Date()
-      futureDate.setDate(futureDate.getDate() + 30)
-      const futureDateStr = futureDate.toISOString().split("T")[0]
-
       const fetchPromises = leagues.map((league) => {
-        return fetch(
-          `https://v3.football.api-sports.io/fixtures?league=${league.id}&season=${season}&from=${today}&to=${futureDateStr}`,
-          {
-            method: "GET",
-            headers: { "x-apisports-key": apiKey },
-            // Add timeout to prevent hanging requests
-            signal: AbortSignal.timeout(10000), // 10 second timeout
-          },
-        )
+        return fetch(`https://v3.football.api-sports.io/fixtures?league=${league.id}&season=${season}`, {
+          method: "GET",
+          headers: { "x-apisports-key": apiKey },
+          // Add timeout to prevent hanging requests
+          signal: AbortSignal.timeout(10000), // 10 second timeout
+        })
           .then((response) => {
             if (!response.ok) {
               throw new Error(`API request failed with status ${response.status}`)
@@ -314,28 +304,19 @@ document.addEventListener("DOMContentLoaded", () => {
           // Store fixtureId for later use
           fixtureIds.push(fixtureId)
 
-          // Determine status display text
-          let statusDisplay = matchStatus
-          if (["First Half", "Second Half", "Halftime", "Extra time", "LIVE"].includes(matchStatus)) {
-            statusDisplay = `<span style="color: red;">LIVE</span>`
-          } else if (matchStatus === "Match Finished" || matchStatus === "FINISHED") {
-            statusDisplay = "F/T"
-          } else if (["POSTPONED", "CANCELED", "SUSPENDED"].includes(matchStatus)) {
-            statusDisplay = "N/S"
-          } else if (matchStatus === "Not Started" || matchStatus === "Time to be defined") {
-            // Format the match time for future matches
-            const matchDateTime = new Date(match.fixture.date)
-            const timeStr = matchDateTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-            statusDisplay = `${timeStr}`
-          }
-
           const formattedMatch = {
             teams: `<span class="home-team">${match.teams.home.name} <img src="${match.teams.home.logo}" alt="${match.teams.home.name} logo" class="team-logo home-logo"></span> 
                       vs 
                       <span class="away-team"><img src="${match.teams.away.logo}" alt="${match.teams.away.name} logo" class="team-logo away-logo"> ${match.teams.away.name}</span>`,
             date: matchDate,
             time: formatMatchTime(match.fixture.date),
-            status: statusDisplay,
+            status: ["First Half", "Second Half", "Halftime", "Extra time", "LIVE"].includes(matchStatus)
+              ? `<span style="color: red;">LIVE</span>`
+              : matchStatus === "FINISHED"
+                ? "F/T"
+                : ["POSTPONED", "CANCELED"].includes(matchStatus)
+                  ? "N/S"
+                  : matchStatus,
             score: match.goals.home !== null ? `${match.goals.home} - ${match.goals.away}` : "",
             fixtureId: fixtureId,
           }
@@ -652,3 +633,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000)
   }
 })
+
