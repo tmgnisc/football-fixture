@@ -47,14 +47,6 @@ header h1 {
   color: #ffaaaa;
 }
 
-#matchTitle {
-  font-size: 20px;
-  font-weight: bold;
-  display: block;
-  margin: 15px 0;
-  text-align: center;
-}
-
 /* Styling for Stream Links (Buttons) */
 .stream-link-button {
   padding: 10px 15px;
@@ -210,6 +202,9 @@ header h1 {
 .goal-time {
   font-weight: bold;
   margin-right: 5px;
+}
+#matchTitle {
+  display: none !important;
 }
 
 /* General styling for the match header container */
@@ -1392,10 +1387,6 @@ footer {
     font-size: 0.9rem;
   }
 
-  #matchTitle {
-    font-size: 16px;
-  }
-
   /* Improved H2H mobile styling */
   .h2h-header {
     padding: 10px;
@@ -1596,10 +1587,6 @@ footer {
     margin: 0 5px;
   }
 
-  #matchTitle {
-    font-size: 14px;
-  }
-
   /* Further improved H2H mobile styling for very small screens */
   .h2h-container {
     padding: 10px;
@@ -1772,5 +1759,58 @@ footer {
 
   .standings-modal-header h3 {
     font-size: 1.1rem;
+  }
+}
+
+/* Add breadcrumb navigation styling */
+.match-breadcrumb {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #111;
+  border-bottom: 2px solid red;
+  margin: 0 auto 15px;
+  width: 90%;
+  max-width: 800px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.breadcrumb-item {
+  color: #ccc;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb-item:hover {
+  color: white;
+}
+
+.breadcrumb-item.active {
+  color: white;
+  font-weight: bold;
+}
+
+.breadcrumb-separator {
+  color: #666;
+  margin: 0 8px;
+  font-size: 16px;
+}
+
+/* Mobile adjustments for breadcrumb */
+@media screen and (max-width: 480px) {
+  .match-breadcrumb {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .breadcrumb-item {
+    font-size: 12px;
+  }
+
+  .breadcrumb-separator {
+    margin: 0 5px;
+    font-size: 14px;
   }
 }
